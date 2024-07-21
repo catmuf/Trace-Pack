@@ -27,11 +27,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-# ['127.0.0.1', 'localhost'] 'tracepack-d74d282d8352.herokuapp.com'
+# ['127.0.0.1', 'localhost']
 # host which is going to connect
-ALLOWED_HOSTS = ['tracepack-d74d282d8352.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 # Application definition
 
