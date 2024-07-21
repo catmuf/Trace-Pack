@@ -1,0 +1,199 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Profile</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+          <li class="breadcrumb-item">Users</li>
+          <li class="breadcrumb-item active">Profile</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section profile">
+      <div class="row d-flex align-items-center justify-content-center">
+
+        <div class="col-xl-10">
+
+          <div class="card">
+            <div class="card-body pt-3">
+              <!-- Bordered Tabs -->
+              <ul class="nav nav-tabs nav-tabs-bordered">
+
+                <li class="nav-item">
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                </li>                
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                </li>
+
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#session-activity">Activity session</button>
+                </li>
+
+
+              </ul>
+              <div class="tab-content pt-2">
+
+                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                  <h5 class="card-title">Hi, {{request.user}}!</h5>
+
+                  <h5 class="card-title">Profile Details</h5>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label ">Email</div>
+                    <div class="col-lg-9 col-md-8">{{user.email}}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Username</div>
+                    <div class="col-lg-9 col-md-8">{{user.username}}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Date created</div>
+                    <div class="col-lg-9 col-md-8">{{user.date_joined | date:"Y-m-d"}}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Last Login</div>
+                    <div class="col-lg-9 col-md-8">{{user.last_login}}</div>
+                  </div>
+                </div>
+
+                <div class="tab-pane fade pt-3 col-xl-8 m-auto" id="profile-change-password">
+                  {% if messages %}
+                      {% for message in messages %}
+                        {% if 'error' in message.tags %}
+                          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{message}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                          </div>
+                        {% elif 'success' in message.tags %}
+                          <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                          </div>
+                        {% endif %}
+                      {% endfor %}
+                  {% endif %}
+                  <!-- Change Password Form -->
+                  <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="row mb-4">
+                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                      <div class="col-md-8 col-lg-9">
+                        {{form.old_password}}
+                        <div class="col-12 mt-2">
+                          <input name="check-password" type="checkbox" onclick="checkCurrentPassword()" id="check-password">
+                          <label for="checkPassword">Show password</label>
+                        </div>
+                        <div class="invalid-feedback" id="showInvalidCurrentPassword">Enter at least 8 characters that contain at least one number and one uppercase and lowercase letter.</div>
+                      </div>
+                    </div>
+
+                    <div class="row mb-4">
+                      <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                      <div class="col-md-8 col-lg-9">
+                        {{form.new_password1}}
+                        <div class="invalid-feedback" id="showInvalidNewPassword">Enter at least 8 characters that contain at least one number and one uppercase and lowercase letter.</div>
+                      </div>
+                    </div>
+
+                    <div class="row mb-4">
+                      <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                      <div class="col-md-8 col-lg-9">
+                        {{form.new_password2}}
+                        <div class="col-12 mt-2">
+                          <input name="check-password" type="checkbox" onclick="checkPassword()" id="check-password">
+                          <label for="checkPassword">Show password</label>
+                          <div class="invalid-feedback" id="showInvalidRepeatPassword">Password do not match.</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="text-center">
+                      <button type="submit" id="buttonSubmit" class="btn btn-primary" disabled>Change Password</button>
+                    </div>
+                  </form>
+                  <!-- End Change Password Form -->
+                </div>
+
+                <div class="tab-pane fade pt-3" id="session-activity">
+
+                  <div class="card">
+                    <div class="card-body overflow-auto">
+                      <h5 class="card-title">Session Logs</h5>
+        
+                      <!-- Table with hoverable rows -->
+                      <table class="table table-hover datatable">
+                        <thead>
+                          <tr>
+                            <th scope="col" ata-type="date" data-format="MYSQL">Date and Time</th>
+                            <th scope="col">Action</th>
+                            <th scope="col">IP Address</th>
+                            <th scope="col">Modification</th>
+                            <th scope="col">URL</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for activity in activity_list %}
+                          <tr>
+                            <th scope="row">{{activity.timestamp | date:"Y-m-d"}} {{activity.timestamp | time:"H:i"}}</th>
+                            <td>{{activity.action}}</td>
+                            <td>{{activity.ip_address}}</td>
+                            <td>
+                              <div class="d-flex align-items-center justify-content-center">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#StatusModal{{activity.id}}">
+                              View
+                              </button>
+                            </div>
+                              
+                            </td>
+                            <td>{{activity.url}}</td>
+                            <!-- Modal -->
+                            <div class="modal fade" id="StatusModal{{activity.id}}" tabindex="-1" aria-labelledby="ActivityModalLabel{{activity.id}}" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="ActivityModalLabel{{activity.id}}">{{activity.action}} - {{activity.timestamp}}</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    {{activity.modification | linebreaks}}
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                      <!-- End Table with hoverable rows -->
+        
+                    </div>
+                  </div>
+
+                </div>
+
+
+              </div><!-- End Bordered Tabs -->
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+{% endblock %}

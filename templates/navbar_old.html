@@ -1,0 +1,13 @@
+<a href="/">
+    <h1>Trace Pack</h1>
+</a>
+<form method="GET" action="{% url 'dashboard' %}">
+    <input type="text" name="search_query" placeholder="Search Trackings..." />
+</form>
+{% if request.user.is_authenticated %}
+<p>Hello, <a href="{% url 'user-profile' request.user.id %}">{{request.user}}</a></p>
+    <a href="{% url 'logout' %}">Logout</a>
+{% else %}    
+    <a href="{% url 'login' %}">Login</a>
+{% endif %}
+<hr>

@@ -1,0 +1,87 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Add Tracking</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'tracking-list' %}">Tracking Numbers</a></li>
+        {% if title_page == 'Add Tracking' %}
+        <li class="breadcrumb-item active">{{title_page}}</li>
+        {% else %}
+        <li class="breadcrumb-item">{{tracking_info.tracking_number}} - {{tracking_info.title}}</li>
+        <li class="breadcrumb-item active">{{title_page}}</li>
+        {% endif %}
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-5 mx-auto">
+        {% if messages %}
+        {% for message in messages %}
+        {% if 'error' in message.tags %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{message}}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% elif 'success' in message.tags %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Tracking Information</h5>
+            <!-- Vertical Form -->
+            <form class="row g-3 was-validated" method="POST" action="">
+              {% csrf_token %}
+              <div class="col-12">
+                <label for="title" class="form-label">Title</label>
+                {{form.title}}
+                <div class="invalid-feedback">
+                  Enter title.
+                </div>
+              </div>
+              <div class="col-12">
+                <label for="tracking_number" class="form-label">Tracking Number</label>
+                {{form.tracking_number}}
+                <div class="invalid-feedback">
+                  Enter tracking number.
+                </div>
+              </div>
+              <div class="col-12">
+                <label for="delivery_type" class="form-label">Delivery Type</label>
+                {{form.delivery_type}}
+                <div class="invalid-feedback">
+                  Select type.
+                </div>
+              </div>
+              <div class="col-12">
+                <label for="id_courier" class="form-label">Courier:</label>
+                <select name="courier" id="id_courier" class="selectpicker form-control" data-live-search="true" required>
+                  <option value="Auto" selected>Auto</option>
+                  {% for courier in courier_list %}
+                  <option value="{{courier.id}}">{{courier}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="reset" class="btn btn-secondary">Reset</button>
+              </div>
+            </form>
+            <!-- Vertical Form -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}

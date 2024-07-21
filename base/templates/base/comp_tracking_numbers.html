@@ -1,0 +1,19 @@
+<div>
+    {% for tracking_number in tracking_numbers_list %}
+        <div>
+            {% if request.user == tracking_number.user %}
+            <a href="{% url 'update-tracking' tracking_number.id %}">Edit</a>
+            <a href="{% url 'delete-tracking' tracking_number.id %}">Delete</a>
+            {% endif %}
+            <p>@{{tracking_number.user}}</p>
+            <h3>{{tracking_number.id}} - {{tracking_number.title}} -- <a href="{% url 'overview' tracking_number.id %}">{{tracking_number.tracking_number}}</h3></a>
+            <p>Latest status: {{tracking_number.status_milestone}}</p>
+            <p>Courier(s) involved:</p>
+            <ul class="messages">
+                {% for courier in tracking_number.couriers_involved.all %}
+                <li>{{courier.name}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+</div>

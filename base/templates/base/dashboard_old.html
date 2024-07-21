@@ -1,0 +1,24 @@
+<!-- Extends from the parent, main.html -->
+{% extends 'main.html' %}
+{% block content %}
+<style>
+    .home-container{
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+    }
+</style>
+<div class="home-container">
+    <div>
+        {% include 'base/comp_couriers.html' %}
+    </div>
+    <div>
+        <h5>{{count_tracking_numbers}} trackings available</h5>
+        <a href="{% url 'create-tracking' %}">Create Tracking</a>
+        <hr>
+        {% include 'base/comp_tracking_numbers.html' %}
+    </div>
+    <div>
+        {% include 'base/comp_activity.html' %}
+    </div>
+</div>
+{% endblock %}

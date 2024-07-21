@@ -1,0 +1,10 @@
+<h3>Browse Couriers</h3>
+<hr>
+<div>
+    <a href="{% url 'dashboard' %}">All</a>
+</div>
+{% for courier in couriers %}
+<div>
+    <a href="{% url 'dashboard' %}?search_query={{courier.name}}">{{courier.name}}</a>
+</div>
+{% endfor %}

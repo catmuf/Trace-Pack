@@ -1,0 +1,10 @@
+{% extends 'main.html' %}
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    <p>Are you sure you want to delete "{{tracking_info.title}}" ({{tracking_info.tracking_number}})?</p>
+    <!-- Sends user where he came from (previous page)-->
+    <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}

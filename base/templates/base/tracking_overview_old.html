@@ -1,0 +1,35 @@
+<!-- Extends from the parent, main.html -->
+{% extends 'main.html' %}
+{% block content %}
+<h1>{{tracking_number.title}} @{{tracking_number.user}}</h1>
+<h3>{{tracking_number.courier_name}} - {{tracking_number.tracking_number}}</h3>
+<p>Lastest status: {{tracking_number.status_code}}</p>
+<p>Date of creation: {{tracking_number.created}}</p>
+<p>Information recieved: {{tracking_statistics.info_received_datetime}}</p>
+<p>Start of in transit date: {{tracking_statistics.in_transit_date_time}}</p>
+<p>Out for delivery date: {{tracking_statistics.outFor_delivery_date_time}}</p>
+<p>Failed attempt: {{tracking_statistics.failed_attempt_date_time}}</p>
+<p>Delivered date: {{tracking_statistics.delivered_date_time}}</p>
+<p>Coruier(s) involved:</p>
+
+<ul class="couriers-involved">
+    {% for courier in couriers_involved %}
+        <li>{{courier}}</li>
+    {% endfor %}
+</ul>
+<div class="status-wrapper">
+    <h3>Status</h3>
+    <hr>
+
+    {% for state in status %}
+        <p>{{state.status}}</p>
+        <p>{{state.occurrence_date_time}} - {{state.occurrence_date_time | timesince}}</p>
+        <p>{{state.courier}}</p>
+        <p>{{state.status_code}}</p>
+        <p>{{state.status_category}}</p>
+        <p>{{state.status_milestone}}</p>
+        <hr>
+    {% endfor %}
+
+</div>
+{% endblock %}

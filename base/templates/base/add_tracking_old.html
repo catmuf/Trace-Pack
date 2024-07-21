@@ -1,0 +1,20 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>
+            <label for="id_courier">Courier:</label>
+            <select name="courier" id="id_courier">
+                <option value="Auto" selected>Auto</option>
+                {% for courier in courier_list %}
+                    <option value="{{courier.id}}">{{courier}}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <input type="submit" value="Submit" />
+    </form>
+</div>
+{% endblock %}

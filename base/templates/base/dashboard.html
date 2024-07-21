@@ -1,0 +1,475 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+      <div class="pagetitle">
+        <div class="d-flex align-items-center mb-2">
+          <h1>Dashboard</h1>
+          <div class="ps-3">
+            <a role="button" class="btn btn-primary rounded-pill" href="{% url 'add-tracking' %}"><i class="bi bi-plus-lg"></i> Add Tracking</a>
+          </div>
+          
+        </div>
+        <nav>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+            <li class="breadcrumb-item active">Dashboard</li>
+          </ol>
+        </nav>
+      </div>
+      <!-- End Page Title -->
+      <section class="section dashboard">
+        <div class="row">
+          <!-- Left side columns -->
+          <div class="col-lg-8">
+            <div class="row">
+                <!-- Tracking number -->
+                <div class="col-xxl-4 col-md-6">
+                  <div class="card info-card sales-card">
+                    <div class="card-body">
+                      <a href="{% url 'tracking-list' %}"><h5 class="card-title">Tracking numbers </h5></a>
+                      <!-- <span>| Today</span> -->
+                      <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                          <i class="bi bi-upc-scan"></i>
+                        </div>
+                        <div class="ps-3">
+                          <h6>{{count_tracking_numbers}}</h6>
+                          <!-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Couriers involved -->
+                <div class="col-xxl-4 col-md-6">
+                  <div class="card info-card sales-card">
+                    <div class="card-body">
+                      <a href="{% url 'courier-list' %}"><h5 class="card-title">Couriers involved</h5></a>
+                      <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                          <i class="bi bi-building"></i>
+                        </div>
+                        <div class="ps-3">
+                          <h6>{{count_couriers_involved}}</h6>
+                          <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Events -->
+                <div class="col-xxl-4 col-md-6">
+                  <div class="card info-card sales-card">
+                    <div class="card-body">
+                      <a href="{% url 'event-list' %}"><h5 class="card-title">Events</h5></a>
+                      <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                          <i class="bi bi-card-list"></i>
+                        </div>
+                        <div class="ps-3">
+                          <h6>{{count_tracking_states}}</h6>
+                          <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="row">
+              <!-- States -->
+              <div class="pagetitle">
+                <h1>Status</h1>
+              </div>
+              <!-- Delivered packages -->
+              <div class="col-xxl-4 col-md-6">
+                <div class="card info-card delivered-card">
+                  <div class="card-body">
+                    <a href="{% url 'delivered-list' %}"><h5 class="card-title">Delivered</h5></a>
+                    <div class="d-flex align-items-center">
+                      <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                        <i class="bi bi-house-check" type="button" class="btn btn-secondary"
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-bs-custom-class="custom-tooltip"
+                        data-bs-title="The shipment has been delivered. (Delivered at home, picked-up from a pickup point, etc.)"></i>
+                      </div>
+                      <div class="ps-3">
+                        <h6>{{count_packages_delivered}}</h6>
+                        <!-- <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Out for Delivery -->
+              <div class="col-xxl-4 col-md-6">
+                <div class="card info-card out-for-delivery-card">
+                  <div class="card-body">
+                    <a href="{% url 'delivery-list' %}"><h5 class="card-title">Out for Delivery</h5></a>
+                    <div class="d-flex align-items-center">
+                      <div class="card-icon resize-badge rounded-circle d-flex align-items-center justify-content-center">
+                        <!-- <i class="fa-solid fa-truck-ramp-box"></i> -->
+                        <i class="icofont-fast-delivery" type="button" class="btn btn-secondary"
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-bs-custom-class="custom-tooltip"
+                        data-bs-title="The shipment is about to be delivered, usually the same day."></i>
+                      </div>
+                      <div class="ps-3">
+                        <h6>{{count_packages_out_for_delivery}}</h6>
+                        <!-- <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Available for pickup -->
+              <div class="col-xxl-4 col-md-6">
+                <div class="card info-card pickup-card">
+                  <div class="card-body">
+                    <a href="{% url 'pick-up-list' %}"><h5 class="card-title">Pick ups</h5></a>
+                    <div class="d-flex align-items-center">
+                      <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                        <i class="bi bi-building-exclamation" type="button" class="btn btn-secondary"
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-bs-custom-class="custom-tooltip"
+                        data-bs-title="The shipment is ready to be picked up by the receiver. (At a pickup point such as a post office, a locker, or a local business)"></i>
+                      </div>
+                      <div class="ps-3">
+                        <h6>{{count_packages_available_for_pickup}}</h6>
+                        <!-- <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End Customers Card -->
+              <!-- Customers Card -->
+              <div class="col-xxl-4 col-md-6">
+                <div class="card info-card info-received-card">
+                  <div class="card-body">
+                    <a href="{% url 'info-received-list' %}"><h5 class="card-title">Info. received</h5></a>
+                    <div class="d-flex align-items-center">
+                      <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                        <i class="icofont-thumbs-up" type="button" class="btn btn-secondary"
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-bs-custom-class="custom-tooltip"
+                        data-bs-title="The shipment has been declared electronically and/or is in preparation by the shipper."></i>
+                      </div>
+                      <div class="ps-3">
+                        <h6>{{count_packages_info_received}}</h6>
+                        <!-- <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End Customers Card -->
+
+              <!-- In transit -->
+              <div class="col-xxl-4 col-md-6">
+                <div class="card info-card in-transit-card">
+                  <div class="card-body">
+                    <a href="{% url 'in-transit-list' %}"><h5 class="card-title">In transits</h5></a>
+                    <div class="d-flex align-items-center">
+                      <div class="card-icon resize-badge rounded-circle d-flex align-items-center justify-content-center">
+                        <i class="icofont-delivery-time" type="button" class="btn btn-secondary"
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-bs-custom-class="custom-tooltip"
+                        data-bs-title="The shipment has been accepted or picked up from the shipper and is on the way."></i>
+                      </div>
+                      <div class="ps-3">
+                        <h6>{{count_packages_in_transit}}</h6>
+                        <!-- <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <!-- Pending -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card pending-card">
+                <div class="card-body">
+                  <a href="{% url 'pending-list' %}"><h5 class="card-title">Pending</h5></a>
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-hourglass-split" type="button" class="btn btn-secondary"
+                      data-bs-toggle="tooltip" data-bs-placement="top"
+                      data-bs-custom-class="custom-tooltip"
+                      data-bs-title="The shipment doesn’t have events available yet or can’t be found."></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{count_packages_pending}}</h6>
+                      <!-- <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Failed attempts -->
+              <!-- Failed attempts -->
+              <div class="col-xxl-4 col-md-6">
+                <div class="card info-card failed-attemptes-card">
+                  <div class="card-body">
+                    <a href="{% url 'failed-attempt-list' %}"><h5 class="card-title">Failed attempts</h5></a>
+                    <div class="d-flex align-items-center">
+                      <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                        <i class='bx bx-error' type="button" class="btn btn-secondary"
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-bs-custom-class="custom-tooltip"
+                        data-bs-title="A delivery attempt was made and failed (Recipient not available, business closed, etc.)"></i>
+                        <!-- <i class="bi bi-people"></i> -->
+                      </div>
+                      <div class="ps-3">
+                        <h6>{{count_packages_failed_attempt}}</h6>
+                        <!-- <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Failed attempts -->
+              <div class="col-xxl-4 col-md-6">
+                <div class="card info-card exceptions-card">
+                  <div class="card-body">
+                    <a href="{% url 'exception-list' %}"><h5 class="card-title">Exceptions</h5></a>
+                    <div class="d-flex align-items-center">
+                      <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                        <i class="bi bi-envelope-exclamation" type="button" class="btn btn-secondary"
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-bs-custom-class="custom-tooltip"
+                        data-bs-title="The shipment can’t be delivered due to issues that seems to be final (Returning, returned, lost, destroyed, etc.)"></i>
+                      </div>
+                      <div class="ps-3">
+                        <h6>{{count_packages_exception}}</h6>
+                        <!-- <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Recent Sales -->
+              <div class="col-12">
+                <div class="card recent-sales overflow-auto">
+                  <div class="card-body">
+                    <h5 class="card-title">Tracking Numbers</h5>
+                    <table class="table table-borderless datatable">
+                      <thead>
+                        <tr>
+                          <!-- <th scope="col">#</th> -->
+                          <th scope="col">Tracking Number</th>
+                          <th scope="col">Title</th>
+                          <th scope="col">Action</th>
+                          <!-- <th scope="col" data-type="date" data-format="DD/MM/YYYY">Date Added</th> -->
+                          <th scope="col" data-type="date" data-format="MYSQL">Date Added</th>
+                          <th scope="col">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for tracking_number in tracking_numbers_list %}
+                          <tr>
+                            <!-- <th scope="row"><a href="#">#{{tracking_number.id}}</a></th> -->
+                            <td>{{tracking_number.tracking_number}}</td>
+                            <td><a href="{% url 'overview' tracking_number.id %}" class="text-primary">{{tracking_number.title}}</a></td>
+                            <td>{{tracking_number.delivery_type}}</td>
+                            <td>{{tracking_number.created | date:"Y-m-d"}} {{tracking_number.created | time:"H:i"}}</td>
+                            <!-- <td>{{tracking_number.created | date:"d/m/Y"}}</td> -->
+                            {% if tracking_number.status_milestone == 'pending' %}
+                              <td><span class="badge bg-warning">Pending</span></td>
+                            {% elif tracking_number.status_milestone == 'info_received' %}
+                              <td><span class="badge bg-info">Info. Received</span></td>
+                            {% elif tracking_number.status_milestone == 'in_transit' %}
+                              <td><span class="badge bg-warning">In transit</span></td>
+                            {% elif tracking_number.status_milestone == 'out_for_delivery' %}
+                              <td><span class="badge bg-primary">Out for Delivery</span></td>
+                            {% elif tracking_number.status_milestone == 'failed_attempt' %}
+                              <td><span class="badge bg-secondary">Failed Attempt</span></td>
+                            {% elif tracking_number.status_milestone == 'available_for_pickup' %}
+                              <td><span class="badge bg-primary">Pick Up</span></td>
+                            {% elif tracking_number.status_milestone == 'delivered' %}
+                              <td><span class="badge bg-success">Delivered</span></td>
+                            {% elif tracking_number.status_milestone == 'exception' %}
+                              <td><span class="badge bg-secondary">Exception</span></td>
+                            {% endif %}
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Left side columns -->
+          <!-- Right side columns -->
+          <div class="col-lg-4">
+            <!-- News & Updates Traffic -->
+            <div class="card">
+              <div class="card-body pb-0">
+                <a href="{% url 'event-list' %}"><h5 class="card-title">Latest Updates</h5></a>
+                <div class="news">
+                  {% for tracking_update in tracking_latest_updates %}
+                  <div class="post-item clearfix d-flex align-items-center">
+                    <!-- <i class="bi bi-house-check"></i> -->
+                    {% if tracking_update.status_milestone == 'pending' %}
+                    <div class="icons-updates badge-pending rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-hourglass-split"></i>
+                    </div>
+                    {% elif tracking_update.status_milestone == 'info_received' %}
+                    <div class="icons-updates badge-info_received rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-info-square"></i>
+                    </div>
+                    {% elif tracking_update.status_milestone == 'in_transit' %}
+                    <div class="icons-updates badge-in_transit resize-badge rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="icofont-delivery-time"></i>
+                    </div>
+                    {% elif tracking_update.status_milestone == 'out_for_delivery' %}
+                    <div class="icons-updates badge-out_for_delivery resize-badge rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="icofont-fast-delivery"></i>
+                    </div>
+                    {% elif tracking_update.status_milestone == 'failed_attempt' %}
+                    <div class="icons-updates badge-failed_attempt rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bx bx-error"></i>
+                    </div>
+                    {% elif tracking_update.status_milestone == 'available_for_pickup' %}
+                    <div class="icons-updates badge-available_for_pickup rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-building-exclamation"></i>
+                    </div>
+                    {% elif tracking_update.status_milestone == 'delivered' %}
+                    <div class="icons-updates badge-delivered rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-house-check"></i>
+                    </div>
+                    {% elif tracking_update.status_milestone == 'exception' %}
+                    <div class="icons-updates badge-exception rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-envelope-exclamation"></i>
+                    </div>
+                    {% endif %}
+                    <div class=" info-updates ps-3">
+                      <h4><a href="{% url 'overview' tracking_update.tracking_number.id %}">{{tracking_update.tracking_number.title}}</a></h4>
+                      <h4>{{tracking_update.occurrence_date_time | date:"Y-m-d"}} {{tracking_update.occurrence_date_time | time:"H:i"}}</h4>
+                      {% if tracking_update.status_milestone == 'pending' %}
+                        <span class="badge bg-warning">Pending</span>
+                      {% elif tracking_update.status_milestone == 'info_received' %}
+                        <span class="badge bg-info">Info. Received</span>
+                      {% elif tracking_update.status_milestone == 'in_transit' %}
+                        <span class="badge bg-warning">In transit</span>
+                      {% elif tracking_update.status_milestone == 'out_for_delivery' %}
+                        <span class="badge bg-primary">Out for Delivery</span>
+                      {% elif tracking_update.status_milestone == 'failed_attempt' %}
+                        <span class="badge bg-secondary">Failed Attempt</span>
+                      {% elif tracking_update.status_milestone == 'available_for_pickup' %}
+                        <span class="badge bg-primary">Pick Up</span>
+                      {% elif tracking_update.status_milestone == 'delivered' %}
+                        <span class="badge bg-success">Delivered</span>
+                      {% elif tracking_update.status_milestone == 'exception' %}
+                        <span class="badge bg-danger">Exception</span>
+                      {% endif %}
+                      <p>{{tracking_update.status}}</p>
+                    </div>
+                    
+                  </div>
+                  {% endfor %}
+                </div>
+                <!-- End sidebar recent posts-->
+              </div>
+            </div>
+            <!-- End News & Updates -->
+            <!-- Website Traffic -->
+            <div class="card">
+              <div class="card-body pb-0">
+                <h5 class="card-title">Overview</h5>
+                <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+                <script
+                data-count-packages-pending="{{ count_packages_pending }}"
+                data-count-packages-info-received="{{ count_packages_info_received }}"
+                data-count-packages-in-transit="{{ count_packages_in_transit }}"
+                data-count-packages-out-for-delivery="{{ count_packages_out_for_delivery }}"
+                data-count-packages-failed-attempt="{{ count_packages_failed_attempt }}"
+                data-count-packages-available-for-pickup="{{ count_packages_available_for_pickup }}"
+                data-count-packages-exception="{{ count_packages_exception }}"
+                data-count-packages-delivered="{{ count_packages_delivered }}"
+                >
+                  const data = document.currentScript.dataset;
+                  const countPackagesDelivered = data.countPackagesDelivered;
+                  const countPackagesPending = data.countPackagesPending;
+                  const countPackagesInTransit = data.countPackagesInTransit;
+                  const countPackagesInfoReceived = data.countPackagesInfoReceived;
+                  const countPackagesOutForDelivery = data.countPackagesOutForDelivery;
+                  const countPackagesFailedAttempt = data.countPackagesFailedAttempt;
+                  const countPackagesAvailableForPickup = data.countPackagesAvailableForPickup;
+                  const countPackagesException = data.countPackagesException;
+                
+                  document.addEventListener("DOMContentLoaded", () => {
+                    echarts.init(document.querySelector("#trafficChart")).setOption({
+                      tooltip: {
+                        trigger: 'item'
+                      },
+                      legend: {
+                        top: '1%',
+                        left: 'center'
+                      },
+                      series: [{
+                        name: 'Access From',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        label: {
+                          show: false,
+                          position: 'center'
+                        },
+                        emphasis: {
+                          label: {
+                            show: true,
+                            fontSize: '18',
+                            fontWeight: 'bold'
+                          }
+                        },
+                        labelLine: {
+                          show: false
+                        },
+                        data: [
+                          {
+                            value: countPackagesDelivered,
+                            name: 'Delivered'
+                          },
+                          {
+                            value: countPackagesAvailableForPickup,
+                            name: 'Pick Up'
+                          },
+                          {
+                            value: countPackagesException,
+                            name: 'Exception'
+                          },
+                          {
+                            value: countPackagesFailedAttempt,
+                            name: 'Failed Attempt'
+                          },
+                          {
+                            value: countPackagesInTransit,
+                            name: 'In Transit'
+                          },
+                          {
+                            value: countPackagesInfoReceived,
+                            name: 'Info. Received'
+                          },
+                          {
+                            value: countPackagesOutForDelivery,
+                            name: 'Out For Delivery'
+                          },
+                          {
+                            value: countPackagesPending,
+                            name: 'Pending'
+                          }
+                        ]
+                      }]
+                    });
+                  });
+                </script>
+              </div>
+            </div>
+            <!-- End Website Traffic -->
+          </div>
+          <!-- End Right side columns -->
+        </div>
+      </section>
+    </main>
+{% endblock %}

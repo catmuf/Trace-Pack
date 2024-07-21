@@ -1,0 +1,153 @@
+{% extends 'main.html' %}
+{% block tracking_demo %}
+<main id="main" class="main custom-main">
+    <section class="section">
+        <div class="row mb-2">
+            
+            <div class="pagetitle col-lg-8 m-auto">
+            <a href="{{request.META.HTTP_REFERER}}">
+                <i class="bi bi-arrow-left d-inline fs-5"></i><h1 class="d-inline ms-2">Go Back</h1>
+            </a>
+            </div><!-- End Page Title -->
+
+        </div>
+      <div class="row">
+        <div class="col-lg-4 ms-auto">
+
+          <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{get_tracking_number}}</h5>
+                {% for tracking in tracking_number.data.trackings %}     
+                    {% if tracking.shipment.delivery.estimatedDeliveryDate is not None %}
+                    <P>Estimated delivery date: {{tracking.shipment.delivery.estimatedDeliveryDateFormat}}</P>
+                    {% endif %}
+
+                    {% if tracking.shipment.originCountryCode is not None %}
+                    <P>Origin: {{tracking.shipment.originCountryCode}}</P>
+                    {% endif %}
+
+                    {% if tracking.shipment.destinationCountryCode is not None %}
+                    <P>Destination: {{tracking.shipment.destinationCountryCode}}</P>
+                    {% endif %}
+
+                    {% if tracking.shipment.statusMilestone == 'pending' %}
+                    <p>Latest status: Pending</p>
+                    {% elif tracking.shipment.statusMilestone == 'info_received' %}
+                    <p>Latest status: Info. Received</p>
+                    {% elif tracking.shipment.statusMilestone == 'in_transit' %}
+                    <p>Latest status: In transit</p>
+                    {% elif tracking.shipment.statusMilestone == 'out_for_delivery' %}
+                    <p>Latest status: Out for Delivery</p>
+                    {% elif tracking.shipment.statusMilestone == 'failed_attempt' %}
+                    <p>Latest status: Failed Attempt</p>
+                    {% elif tracking.shipment.statusMilestone == 'available_for_pickup' %}
+                    <p>Latest status: Pick Up</p>
+                    {% elif tracking.shipment.statusMilestone == 'delivered' %}
+                    <p>Latest status: Delivered</p>
+                    {% elif tracking.shipment.statusMilestone == 'exception' %}
+                    <p>Latest status: Exception</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-lg-4 me-auto">
+
+          <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Timestamps</h5>
+                {% for tracking in tracking_number.data.trackings %}
+                    {% if tracking.statistics.timestamps.infoReceivedDatetime is not None %}
+                        <P>Information Received: {{tracking.statistics.timestamps.infoReceivedDateFormat}}, {{tracking.statistics.timestamps.infoReceivedTimeFormat}}</P>
+                    {% endif %}
+
+                    {% if tracking.statistics.timestamps.inTransitDatetime is not None %}
+                        <P>In Transit: {{tracking.statistics.timestamps.inTransitDateFormat}}, {{tracking.statistics.timestamps.inTransitTimeFormat}}</P>
+                    {% endif %}
+
+                    {% if tracking.statistics.timestamps.outForDeliveryDatetime is not None %}
+                        <P>Out for Delivery: {{tracking.statistics.timestamps.outForDeliveryDateFormat}}, {{tracking.statistics.timestamps.outForDeliveryTimeFormat}}</P>
+                    {% endif %}
+
+                    {% if tracking.statistics.timestamps.failedAttemptDatetime is not None %}
+                        <P>Failed Attempt: {{tracking.statistics.timestamps.failedAttemptDateFormat}}, {{tracking.statistics.timestamps.failedAttemptTimeFormat}}</P>
+                    {% endif %}
+
+                    {% if tracking.statistics.timestamps.availableForPickupDatetime is not None %}
+                        <P>Available For Pick Up: {{tracking.statistics.timestamps.availableForPickupDateFormat}}, {{tracking.statistics.timestamps.availableForPickupTimeFormat}}</P>
+                    {% endif %}
+
+                    {% if tracking.statistics.timestamps.exceptionDatetime is not None %}
+                        <P>Exception: {{tracking.statistics.timestamps.exceptionDateFormat}}, {{tracking.statistics.timestamps.exceptionTimeFormat}}</P>
+                    {% endif %}
+
+                    {% if tracking.statistics.timestamps.deliveredDatetime is not None %}
+                        <P>Delivered: {{tracking.statistics.timestamps.deliveredDateFormat}}, {{tracking.statistics.timestamps.deliveredTimeFormat}}</P>
+                    {% endif %}
+                {% endfor %}
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+            <div class="card overflow-auto col-lg-8 mx-auto">
+                <div class="card-body">
+                    <!-- Table with hoverable rows -->
+                    <table class="table table-hover" id="accordion">
+                        <thead>
+                        <tr>
+                            <th scope="col">Courier Involved</th>
+                            <th scope="col" data-type="date" data-format="MYSQL">Date</th>
+                            <th scope="col">Status</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for tracking in tracking_number.data.trackings %}
+                                {% for event in tracking.events %}
+                                    <tr data-bs-toggle="collapse" data-bs-target="#collapse{{event.eventId}}" aria-expanded="true" aria-controls="collapse{{event.eventId}}">
+                                        <td>{{event.courierName}}</td>
+                                        <td>{{event.date}} {{event.time}}</td>
+                                        {% if event.statusMilestone == 'pending' %}
+                                        <td><span class="badge bg-warning">Pending</span></td>
+                                        {% elif event.statusMilestone == 'info_received' %}
+                                        <td><span class="badge bg-info">Info. Received</span></td>
+                                        {% elif event.statusMilestone == 'in_transit' %}
+                                        <td><span class="badge bg-warning">In transit</span></td>
+                                        {% elif event.statusMilestone == 'out_for_delivery' %}
+                                        <td><span class="badge bg-primary">Out for Delivery</span></td>
+                                        {% elif event.statusMilestone == 'failed_attempt' %}
+                                        <td><span class="badge bg-secondary">Failed Attempt</span></td>
+                                        {% elif event.statusMilestone == 'available_for_pickup' %}
+                                        <td><span class="badge bg-primary">Pick Up</span></td>
+                                        {% elif event.statusMilestone == 'delivered' %}
+                                        <td><span class="badge bg-success">Delivered</span></td>
+                                        {% elif event.statusMilestone == 'exception' %}
+                                        <td><span class="badge bg-secondary">Exception</span></td>
+                                        {% endif %}
+                                        <td>
+                                        <i class="bi bi-arrow-down" aria-hidden="false"></i>
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" id="collapse{{event.eventId}}" class="collapse" data-bs-parent="#accordion">
+                                            <p class="mx-auto p-2 col-10 border border-black">{{event.status}}</p>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <!-- End Table with hoverable rows -->
+                </div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+{% endblock %}

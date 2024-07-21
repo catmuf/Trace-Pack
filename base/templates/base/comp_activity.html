@@ -1,0 +1,12 @@
+<h3>Recent Update</h3>
+<hr>
+{% for tracking_update in tracking_latest_updates %}
+    <div>
+        <a href="{% url 'overview' tracking_update.tracking_number.id %}">{{tracking_update.tracking_number.tracking_number}}</a>
+        <p>{{tracking_update.tracking_number.title}}</p>
+        <p>State: {{tracking_update.occurrence_date_time}} - {{tracking_update.occurrence_date_time | timesince}}</p>
+        <p>{{tracking_update.status_milestone}}</p>
+        <p>Status: {{tracking_update.status}}</p>
+    </div>
+    <hr>
+{% endfor %}
